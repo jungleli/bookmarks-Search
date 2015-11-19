@@ -20,7 +20,7 @@ $("#search").bind('input propertychange', function () {
 
 var init = function () {
     $.ajax({
-        url: "../json/bookmarks.json",
+        url: "json/bookmarks.json",
         type: "get",
         contentType: "text/plain;charset=utf-8",
         dataType: 'json',
@@ -44,7 +44,7 @@ var init = function () {
 
 var searchResult = function (regex) {
     $.ajax({
-        url: "../json/bookmarks.json",
+        url: "json/bookmarks.json",
         type: "get",
         contentType: "text/plain;charset=utf-8",
         dataType: 'json',
