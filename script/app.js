@@ -3,12 +3,10 @@ $(document).ready(function(){
 });
 
 $("#search").bind('input propertychange', function () {
-    var $searchKey = $("#search");
-    var phrase = $searchKey.val()
+    var phrase = $("#search").val()
         .replace(/^\s+|\s+$/g, "")
         .replace(/\s+/g, "|");
-        phrase = ["(", phrase, ")"].join("");
-        loadBookmarks(new RegExp(phrase, "gi"));
+        loadBookmarks(new RegExp((phrase), "gi"));
 });
 
 var loadBookmarks = function (regex) {
@@ -19,7 +17,7 @@ var loadBookmarks = function (regex) {
         dataType: 'json',
         success: function (bookmarks) {
             var compiled = _.template($("#list").html());
-            var html = compiled({"bookmarks": convertData(bookmarks)});
+            var html = compiled({"bookmarks": filterData(bookmarks)});
             $(".list").html(html);
             $(".list *").highlight(regex, "highlight");
         },
@@ -28,7 +26,7 @@ var loadBookmarks = function (regex) {
         }
     });
 
-    function convertData(bookmarks) {
+    function filterData(bookmarks) {
         return _.chain(bookmarks)
             .filter(function (val, key) {
                 return val.title.match(regex);
