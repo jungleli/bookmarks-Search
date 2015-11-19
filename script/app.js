@@ -1,5 +1,5 @@
-$(function () {
-    init();
+$(document).ready(function(){
+    loadBookmarks();
 });
 
 $("#search").bind('input propertychange', function () {
@@ -7,60 +7,19 @@ $("#search").bind('input propertychange', function () {
     var phrase = $searchKey.val()
         .replace(/^\s+|\s+$/g, "")
         .replace(/\s+/g, "|");
-    if (phrase == "") {
-        init();
-    } else {
-        if (phrase.length < 2) {
-            return;
-        }
         phrase = ["(", phrase, ")"].join("");
-        searchResult(new RegExp(phrase, "gi"));
-    }
+        loadBookmarks(new RegExp(phrase, "gi"));
 });
 
-var init = function () {
+var loadBookmarks = function (regex) {
     $.ajax({
         url: "json/bookmarks.json",
         type: "get",
         contentType: "text/plain;charset=utf-8",
         dataType: 'json',
         success: function (bookmarks) {
-            var convertBookmarks = _.chain(bookmarks)
-                .map(function (val, key) {
-                    return {title: val.title, created: formatDate(val.created)};
-                })
-                .sortBy("created")
-                .reverse()
-                .value();
             var compiled = _.template($("#list").html());
-            var html = compiled({"bookmarks": convertBookmarks});
-            $(".list").html(html);
-        },
-        error: function (XMLHttpRequest, textStatus) {
-            console.log(textStatus);
-        }
-    });
-}
-
-var searchResult = function (regex) {
-    $.ajax({
-        url: "json/bookmarks.json",
-        type: "get",
-        contentType: "text/plain;charset=utf-8",
-        dataType: 'json',
-        success: function (bookmarks) {
-            var convertBookmarks = _.chain(bookmarks)
-                .filter(function (val, key) {
-                    return val.title.match(regex);
-                })
-                .map(function (val, key) {
-                    return {title: val.title, created: formatDate(val.created)};
-                })
-                .sortBy("created")
-                .reverse()
-                .value();
-            var compiled = _.template($("#list").html());
-            var html = compiled({"bookmarks": convertBookmarks});
+            var html = compiled({"bookmarks": convertData(bookmarks)});
             $(".list").html(html);
             $(".list *").highlight(regex, "highlight");
         },
@@ -68,6 +27,19 @@ var searchResult = function (regex) {
             console.log(textStatus);
         }
     });
+
+    function convertData(bookmarks) {
+        return _.chain(bookmarks)
+            .filter(function (val, key) {
+                return val.title.match(regex);
+            })
+            .map(function (val, key) {
+                return {title: val.title, created: formatDate(val.created)};
+            })
+            .sortBy("created")
+            .reverse()
+            .value();
+    }
 }
 
 jQuery.fn.highlight = function (regex, className) {
