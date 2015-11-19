@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bookmarks</title>
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
+
+    <script type="template" id="list">
+        <% _.each(bookmarks, function(bookmark) { %>
+        <li>
+            <%=bookmark.title%>
+            <span class="date">Created @ <%= bookmark.created %></span>
+        </li>
+        <% }); %>
+    </script>
+
+</head>
+<body>
+
+
+<section class="content">
+    <div class="container">
+        <h1>Bookmarks Management Page</h1>
+        <input id="search" placeholder="support multiple key words, separated by spaces..." type="text"/>
+        <ul class="list">
+        </ul>
+    </div>
+</section>
+<footer>
+    <p>&copy Copyright By Li Junli</p>
+</footer>
+
+<script src="script/libs/jquery-2.1.4.min.js"></script>
+<script src="script/libs/underscore.js"></script>
+<script src="script/app.js"></script>
+
+</body>
+</html>
