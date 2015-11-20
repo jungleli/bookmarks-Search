@@ -39,8 +39,6 @@ $(function () {
             .reverse()
             .value();
     }
-
-
 });
 
 function formatDate(date) {
