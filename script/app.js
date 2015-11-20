@@ -1,6 +1,15 @@
 $(function () {
-    var bookmarks = getData();
-    updateList(bookmarks);
+    var bookmarks = [];
+    $.get("json/bookmarks.json")
+        .done(function (data) {
+            bookmarks = _.chain(data)
+                .map(function (val, key) {
+                    return {title: val.title, created: formatDate(val.created)};
+                })
+                .sortBy("created")
+                .reverse();
+            updateList(bookmarks);
+        });
 
     $("#search").on('input', function () {
         var phrase = $("#search").val()
@@ -17,26 +26,11 @@ $(function () {
         $(".list").html(html);
     }
 
-    function getData() {
-        var bookmarks = JSON.parse(localStorage.getItem('bookmark'));
-        if (!bookmarks)
-            $.get("json/bookmarks.json")
-                .done(function (data) {
-                    bookmarks = localStorage.setItem('bookmark', JSON.stringify(data));
-                });
-        return bookmarks;
-    }
-
     function filterData(data, regex) {
         return _.chain(data)
             .filter(function (val, key) {
                 return val.title.match(regex);
             })
-            .map(function (val, key) {
-                return {title: val.title, created: formatDate(val.created)};
-            })
-            .sortBy("created")
-            .reverse()
             .value();
     }
 });
