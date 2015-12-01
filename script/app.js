@@ -11,7 +11,7 @@ $(function () {
             updateList(bookmarks);
         });
 
-    $("#search").on('input', function () {
+    $("#search").on('input change', function () {
         var phrase = $("#search").val()
             .replace(/^\s+|\s+$/g, "")
             .replace(/\s+/g, "|");
@@ -33,8 +33,8 @@ $(function () {
             })
             .value();
     }
-});
-
+	
+	
 function formatDate(date) {
     var time = new Date(parseInt(date) * 1000);
     var year = time.getFullYear();
@@ -58,3 +58,5 @@ jQuery.fn.highlight = function (regex, className) {
             });
     });
 };
+});
+
